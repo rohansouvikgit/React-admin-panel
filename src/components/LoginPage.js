@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Spinner } from 'react-bootstrap'
 import Axios from '../Axios'
 import { useToasts } from 'react-toast-notifications'
 import { useHistory } from 'react-router-dom'
@@ -12,9 +12,11 @@ const LoginPage = () => {
 		username: '',
 		password: ''
 	})
+	const [loading, setLoading] = useState(false)
 
 	const submitForm = (e) => {
 		e.preventDefault()
+		setLoading(true)
 		Axios.post('/admin/login', { form })
 			.then(function (result) {
 				if (result.status === 200) {
@@ -25,6 +27,7 @@ const LoginPage = () => {
 						appearance: 'success',
 						autoDismiss: true
 					})
+					setLoading(false)
 				}
 			})
 			.catch(function (error) {
@@ -34,6 +37,7 @@ const LoginPage = () => {
 						autoDismiss: true
 					})
 					document.getElementById('login-form').reset()
+					setLoading(false)
 				}
 			})
 	}
@@ -41,6 +45,18 @@ const LoginPage = () => {
 	const changeHandler = (e) => {
 		setForm({ ...form, [e.target.name]: e.target.value })
 	}
+
+	const loadingButton = (
+		<Button variant="primary" type="submit">
+			<Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />
+			Loading...
+		</Button>
+	)
+	const submitButton = (
+		<Button variant="primary" type="submit">
+			Login
+		</Button>
+	)
 
 	return (
 		<div>
@@ -63,9 +79,7 @@ const LoginPage = () => {
 						onChange={changeHandler}
 					/>
 				</Form.Group>
-				<Button variant="primary" type="submit">
-					Login
-				</Button>
+				{loading ? loadingButton : submitButton}
 			</Form>
 		</div>
 	)
