@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import { ToastProvider } from 'react-toast-notifications'
 import Header from './components/Header'
 // import Sidebar from './components/Sidebar'
@@ -21,6 +21,7 @@ const App = () => {
 						<PrivateRoute component={Header} />
 						<Switch>
 							{/* <Sidebar pageWrapId={'page-wrap'} outerContainerId={'App'} /> */}
+							<Route exact path="/" component={() => <Redirect to="/Dashboard" />} />
 							<Route path="/auth/login" exact component={LoginPage} />
 							<PrivateRoute path="/dashboard" exact component={Dashboard} />
 							<PrivateRoute path="/category" exact component={Category} />

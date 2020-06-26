@@ -29,7 +29,7 @@ const Category = () => {
 	const showCategory = async () => {
 		const response = await Axios.get('/admin/showCategory')
 		setCat(response.data.cat)
-		console.log(response.data.cat)
+		// console.log(response.data.cat)
 	}
 
 	const editCat = (name) => {
@@ -70,7 +70,11 @@ const Category = () => {
 
 	useEffect(() => {
 		showCategory()
-	}, [])
+	}, [handleClose])
+
+	const editModal = (
+		<CatEditModal show={show} handleClose={handleClose} filteredCat={filteredCat[0]} />
+	)
 
 	return (
 		<div>
@@ -114,7 +118,7 @@ const Category = () => {
 				</tbody>
 			</Table>
 
-			<CatEditModal show={show} handleClose={handleClose} filteredCat={filteredCat[0]} />
+			{show ? editModal : ''}
 		</div>
 	)
 }
