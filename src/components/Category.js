@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import Axios from '../Axios'
 import { Table, Button } from 'react-bootstrap'
 import CatEditModal from './CategoryEdit'
@@ -6,36 +6,42 @@ import Swal from 'sweetalert2'
 import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 
+const categoryReducer = (state, action) => {
+	switch (action.type) {
+		case 'SHOW_CATEGORY':
+			return action.payload
+		case 'REMOVE_CATEGORY':
+			return state.filter((key) => key.name !== action.payload)
+		default:
+			return state
+	}
+}
+
 const Category = () => {
-	const [cat, setCat] = useState([])
+	const [category, dispatch] = useReducer(categoryReducer, [])
 	const [show, setShow] = useState(false)
 	const [filteredCat, setFilteredCat] = useState([])
 	const history = useHistory()
 	const { addToast } = useToasts()
-
-	const handleClose = () => setShow(false)
-	const handleShow = () => setShow(true)
-
 	let count = 0
-	function autoInc() {
-		count++
-		return count
-	}
 
-	const insertCat = () => {
-		history.push('/category/insert')
+	const handleClose = () => {
+		setShow(false)
+		showCategory()
 	}
+	const handleShow = () => setShow(true)
 
 	const showCategory = async () => {
 		const response = await Axios.get('/admin/showCategory')
-		setCat(response.data.cat)
-		// console.log(response.data.cat)
+		dispatch({
+			type: 'SHOW_CATEGORY',
+			payload: response.data.cat
+		})
 	}
 
 	const editCat = (name) => {
-		const result = cat.filter((key) => key.name === name)
+		const result = category.filter((key) => key.name === name)
 		setFilteredCat(result)
-		// console.log(filteredCat)
 		handleShow()
 	}
 
@@ -62,7 +68,10 @@ const Category = () => {
 						appearance: 'warning',
 						autoDismiss: true
 					})
-					setCat(cat.filter((key) => key.name !== response.data.name))
+					dispatch({
+						type: 'REMOVE_CATEGORY',
+						payload: response.data.name
+					})
 				}
 			}
 		})
@@ -70,7 +79,7 @@ const Category = () => {
 
 	useEffect(() => {
 		showCategory()
-	}, [handleClose])
+	}, [])
 
 	const editModal = (
 		<CatEditModal show={show} handleClose={handleClose} filteredCat={filteredCat[0]} />
@@ -78,7 +87,7 @@ const Category = () => {
 
 	return (
 		<div>
-			<Button variant="primary" onClick={insertCat}>
+			<Button variant="primary" onClick={() => history.push('/category/insert')}>
 				Add Category
 			</Button>
 			<Table striped bordered hover>
@@ -91,10 +100,10 @@ const Category = () => {
 					</tr>
 				</thead>
 				<tbody>
-					{cat.map((item) => {
+					{category.map((item) => {
 						return (
 							<tr key={item.id}>
-								<td>{autoInc()}</td>
+								<td>{++count}</td>
 								<td>{item.name}</td>
 								<td>
 									<ol>

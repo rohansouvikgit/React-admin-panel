@@ -1,16 +1,10 @@
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '../node_modules/font-awesome/css/font-awesome.min.css';
+/* @import '@trendmicro/react-sidenav/dist/react-sidenav.css'; */
 
 html,
 body {
 	margin: 0;
-}
-
-.sticky {
-	left: 0;
-	top: 0;
-	position: fixed;
-	transform: translateZ(0);
 }
 
 /* #App {
