@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Form, Button, Spinner } from 'react-bootstrap'
+import { Form, Button, Spinner, Container, Row, Card } from 'react-bootstrap'
 import Axios from '../Axios'
 import { useToasts } from 'react-toast-notifications'
 import { useHistory } from 'react-router-dom'
@@ -12,6 +12,12 @@ const LoginPage = () => {
 		username: '',
 		password: ''
 	})
+
+	// const errors = {
+	// 	username: '',
+	// 	password: ''
+	// }
+
 	const [loading, setLoading] = useState(false)
 
 	const submitForm = (e) => {
@@ -43,44 +49,67 @@ const LoginPage = () => {
 	}
 
 	const changeHandler = (e) => {
+		e.preventDefault()
+		// const { name, value } = e.target
+		// console.log(name, value)
+
+		// switch (name) {
+		// 	case 'fullName':
+		// 		errors.username = value.length < 5 ? 'Full Name must be 5 characters long!' : ''
+		// 		break
+		// 	case 'password':
+		// 		errors.password = value.length < 6 ? 'Password must be 6 characters long!' : ''
+		// 		break
+		// 	default:
+		// 		break
+		// }
 		setForm({ ...form, [e.target.name]: e.target.value })
 	}
 
 	const loadingButton = (
-		<Button variant="primary" type="submit">
+		<Button variant="primary" type="submit" style={{ float: 'right' }}>
 			<Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />
 			Loading...
 		</Button>
 	)
 	const submitButton = (
-		<Button variant="primary" type="submit">
+		<Button variant="primary" type="submit" style={{ float: 'right' }}>
 			Login
 		</Button>
 	)
 
 	return (
 		<div>
-			<Form onSubmit={submitForm} id="login-form">
-				<Form.Group controlId="username">
-					<Form.Label>Username</Form.Label>
-					<Form.Control
-						type="text"
-						name="username"
-						placeholder="Enter Username"
-						onChange={changeHandler}
-					/>
-				</Form.Group>
-				<Form.Group controlId="password">
-					<Form.Label>Password</Form.Label>
-					<Form.Control
-						type="password"
-						name="password"
-						placeholder="Enter Password"
-						onChange={changeHandler}
-					/>
-				</Form.Group>
-				{loading ? loadingButton : submitButton}
-			</Form>
+			<Container>
+				<Row xs={1} md={3} className="justify-content-md-center">
+					<Card style={{ top: 50 }}>
+						<Card.Header>Admin Login</Card.Header>
+						<Card.Body>
+							<Form onSubmit={submitForm} id="login-form">
+								<Form.Group controlId="username">
+									<Form.Label>Username</Form.Label>
+									<Form.Control
+										type="text"
+										name="username"
+										placeholder="Enter Username"
+										onChange={changeHandler}
+									/>
+								</Form.Group>
+								<Form.Group controlId="password">
+									<Form.Label>Password</Form.Label>
+									<Form.Control
+										type="password"
+										name="password"
+										placeholder="Enter Password"
+										onChange={changeHandler}
+									/>
+								</Form.Group>
+								{loading ? loadingButton : submitButton}
+							</Form>
+						</Card.Body>
+					</Card>
+				</Row>
+			</Container>
 		</div>
 	)
 }

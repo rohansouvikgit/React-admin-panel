@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import Axios from '../Axios'
-import { Table, Button } from 'react-bootstrap'
+import { Table, Button, Container } from 'react-bootstrap'
 import CatEditModal from './CategoryEdit'
 import Swal from 'sweetalert2'
 import { useHistory } from 'react-router-dom'
@@ -90,44 +90,46 @@ const Category = () => {
 			<Button variant="primary" onClick={() => history.push('/category/insert')}>
 				Add Category
 			</Button>
-			<Table striped bordered hover>
-				<thead>
-					<tr>
-						<th>No.</th>
-						<th>Category Name</th>
-						<th>Brand Name</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{category.map((item) => {
-						return (
-							<tr key={item.id}>
-								<td>{++count}</td>
-								<td>{item.name}</td>
-								<td>
-									<ol>
-										{item.brand_id.map((brand) => {
-											return <li key={brand.id}>{brand.name}</li>
-										})}
-									</ol>
-								</td>
-								<td>
-									<Button variant="primary" onClick={() => editCat(item.name)}>
-										Edit
-									</Button>
-									&nbsp;&nbsp;
-									<Button variant="danger" onClick={() => removeCat(item.name)}>
-										Delete
-									</Button>
-								</td>
-							</tr>
-						)
-					})}
-				</tbody>
-			</Table>
+			<Container>
+				<Table striped bordered hover>
+					<thead>
+						<tr>
+							<th>No.</th>
+							<th>Category Name</th>
+							<th>Brand Name</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{category.map((item) => {
+							return (
+								<tr key={item.id}>
+									<td>{++count}</td>
+									<td>{item.name}</td>
+									<td>
+										<ol>
+											{item.brand_id.map((brand) => {
+												return <li key={brand.id}>{brand.name}</li>
+											})}
+										</ol>
+									</td>
+									<td>
+										<Button variant="primary" onClick={() => editCat(item.name)}>
+											Edit
+										</Button>
+										&nbsp;&nbsp;
+										<Button variant="danger" onClick={() => removeCat(item.name)}>
+											Delete
+										</Button>
+									</td>
+								</tr>
+							)
+						})}
+					</tbody>
+				</Table>
+			</Container>
 
-			{show ? editModal : ''}
+			{show && editModal}
 		</div>
 	)
 }

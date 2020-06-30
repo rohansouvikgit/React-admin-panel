@@ -12,6 +12,7 @@ const Category = lazy(() => import('./components/Category'))
 const Brand = lazy(() => import('./components/Brands'))
 const Product = lazy(() => import('./components/Product'))
 const InsertCategory = lazy(() => import('./components/InsertCategory'))
+const InsertBrand = lazy(() => import('./components/InsertBrand'))
 
 const App = () => {
 	return (
@@ -29,6 +30,7 @@ const App = () => {
 								<PrivateRoute path="/category" exact component={Category} />
 								<PrivateRoute path="/category/insert" exact component={InsertCategory} />
 								<PrivateRoute path="/brand" exact component={Brand} />
+								<PrivateRoute path="/brand/insert" exact component={InsertBrand} />
 								<PrivateRoute path="/product" exact component={Product} />
 							</Switch>
 						</div>

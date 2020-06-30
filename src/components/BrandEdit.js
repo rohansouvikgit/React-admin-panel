@@ -93,7 +93,7 @@ const BrandEditModal = ({ show, handleClose, filteredBrand }) => {
 				<Modal.Body>
 					<Form onSubmit={formSubmit}>
 						<Form.Group controlId="brandName">
-							<Form.Label>Category Name</Form.Label>
+							<Form.Label>Brand Name</Form.Label>
 							<Form.Control
 								type="text"
 								value={form.name}
@@ -101,7 +101,7 @@ const BrandEditModal = ({ show, handleClose, filteredBrand }) => {
 							/>
 						</Form.Group>
 						<Form.Group controlId="brandDescription">
-							<Form.Label>Category Name</Form.Label>
+							<Form.Label>Brand Description</Form.Label>
 							<Form.Control
 								type="text"
 								value={form.description}

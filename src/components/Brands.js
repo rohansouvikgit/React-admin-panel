@@ -1,6 +1,6 @@
 import React, { useReducer, useEffect, useState } from 'react'
 import Axios from '../Axios'
-import { Card, CardGroup, Button } from 'react-bootstrap'
+import { Card, CardGroup, Button, Container, CardColumns } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
@@ -87,28 +87,33 @@ const Brand = () => {
 
 	return (
 		<div>
-			<CardGroup>
-				{brand.map((key) => {
-					return (
-						<Card style={{ width: '18rem' }} key={key.id}>
-							<Card.Img variant="top" src={baseURL + key.brand_image} alt="brand" />
-							<Card.Body>
-								<Card.Title>{key.name}</Card.Title>
-								<Card.Text>{key.brand_description}</Card.Text>
-								<Button variant="primary" onClick={() => editBrand(key.name)}>
-									Edit
-								</Button>
-								&nbsp;&nbsp;
-								<Button variant="danger" onClick={() => removeBrand(key.name)}>
-									Delete
-								</Button>
-								&nbsp;&nbsp;
-							</Card.Body>
-						</Card>
-					)
-				})}
-			</CardGroup>
-			{show ? editModal : ''}
+			<Button variant="primary" onClick={() => history.push('/brand/insert')}>
+				Add Brand
+			</Button>
+			<Container>
+				<CardColumns>
+					{brand.map((key) => {
+						return (
+							<Card style={{ width: '18rem' }} key={key.id}>
+								<Card.Img variant="top" src={baseURL + key.brand_image} alt="brand" />
+								<Card.Body>
+									<Card.Title>{key.name}</Card.Title>
+									<Card.Text>{key.brand_description}</Card.Text>
+									<Button variant="primary" onClick={() => editBrand(key.name)}>
+										Edit
+									</Button>
+									&nbsp;&nbsp;
+									<Button variant="danger" onClick={() => removeBrand(key.name)}>
+										Delete
+									</Button>
+									&nbsp;&nbsp;
+								</Card.Body>
+							</Card>
+						)
+					})}
+				</CardColumns>
+			</Container>
+			{show && editModal}
 		</div>
 	)
 }

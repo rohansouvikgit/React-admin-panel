@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Container } from 'react-bootstrap'
 import Axios from '../Axios'
 import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
@@ -49,31 +49,33 @@ const InsertCategory = () => {
 	return (
 		<div>
 			<Button onClick={() => history.push('/category')}>Goto Category page</Button>
-			<Form onSubmit={submitCat}>
-				<Form.Group controlId="categoryName">
-					<Form.Label>Category Name</Form.Label>
-					<Form.Control
-						type="text"
-						value={form.name}
-						onChange={(e) => setForm({ ...form, name: e.target.value })}
-					/>
-				</Form.Group>
-				<Form.Group controlId="brandName">
-					<Form.Label>Brands</Form.Label>
-					<Form.Control as="select" multiple onChange={handleMultiSelect}>
-						{brand.map((key) => {
-							return (
-								<option key={key.id} value={key.id}>
-									{key.name}
-								</option>
-							)
-						})}
-					</Form.Control>
-				</Form.Group>
-				<Button variant="primary" type="submit">
-					Submit
-				</Button>
-			</Form>
+			<Container>
+				<Form onSubmit={submitCat}>
+					<Form.Group controlId="categoryName">
+						<Form.Label>Category Name</Form.Label>
+						<Form.Control
+							type="text"
+							value={form.name}
+							onChange={(e) => setForm({ ...form, name: e.target.value })}
+						/>
+					</Form.Group>
+					<Form.Group controlId="brandName">
+						<Form.Label>Brands</Form.Label>
+						<Form.Control as="select" multiple onChange={handleMultiSelect}>
+							{brand.map((key) => {
+								return (
+									<option key={key.id} value={key.id}>
+										{key.name}
+									</option>
+								)
+							})}
+						</Form.Control>
+					</Form.Group>
+					<Button variant="primary" type="submit">
+						Submit
+					</Button>
+				</Form>
+			</Container>
 		</div>
 	)
 }
