@@ -31,10 +31,9 @@ const CatEditModal = ({ show, handleClose, filteredCat }) => {
 
 	const formSubmit = (e) => {
 		e.preventDefault()
-		Axios.patch(`/admin/categoryEdit/${filteredCat.id}`, { form })
+		Axios.patch(`/admin/categoryEdit/${filteredCat.id}`, form)
 			.then(function (result) {
 				if (result.status === 200) {
-					history.push('/category')
 					addToast('Category updated...', {
 						appearance: 'success',
 						autoDismiss: true

@@ -91,7 +91,7 @@ const Brand = () => {
 				{brand.map((key) => {
 					return (
 						<Card style={{ width: '18rem' }} key={key.id}>
-							<Card.Img variant="top" src={baseURL + key.brand_image} alt="brand image" />
+							<Card.Img variant="top" src={baseURL + key.brand_image} alt="brand" />
 							<Card.Body>
 								<Card.Title>{key.name}</Card.Title>
 								<Card.Text>{key.brand_description}</Card.Text>
