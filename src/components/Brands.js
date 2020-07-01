@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import BrandEditModal from './BrandEdit'
+import { Edit, Trash2 } from 'react-feather'
 
 const brandReducer = (state, action) => {
 	switch (action.type) {
@@ -99,14 +100,17 @@ const Brand = () => {
 								<Card.Body>
 									<Card.Title>{key.name}</Card.Title>
 									<Card.Text>{key.brand_description}</Card.Text>
-									<Button variant="primary" onClick={() => editBrand(key.name)}>
-										Edit
-									</Button>
+									<Edit
+										color="blue"
+										style={{ cursor: 'pointer' }}
+										onClick={() => editBrand(key.name)}
+									/>
 									&nbsp;&nbsp;
-									<Button variant="danger" onClick={() => removeBrand(key.name)}>
-										Delete
-									</Button>
-									&nbsp;&nbsp;
+									<Trash2
+										color="red"
+										style={{ cursor: 'pointer' }}
+										onClick={() => removeBrand(key.name)}
+									/>
 								</Card.Body>
 							</Card>
 						)

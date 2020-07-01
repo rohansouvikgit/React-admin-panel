@@ -5,6 +5,7 @@ import CatEditModal from './CategoryEdit'
 import Swal from 'sweetalert2'
 import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
+import { Edit, Trash2 } from 'react-feather'
 
 const categoryReducer = (state, action) => {
 	switch (action.type) {
@@ -114,13 +115,17 @@ const Category = () => {
 										</ol>
 									</td>
 									<td>
-										<Button variant="primary" onClick={() => editCat(item.name)}>
-											Edit
-										</Button>
+										<Edit
+											color="blue"
+											style={{ cursor: 'pointer' }}
+											onClick={() => editCat(item.name)}
+										/>
 										&nbsp;&nbsp;
-										<Button variant="danger" onClick={() => removeCat(item.name)}>
-											Delete
-										</Button>
+										<Trash2
+											color="red"
+											style={{ cursor: 'pointer' }}
+											onClick={() => removeCat(item.name)}
+										/>
 									</td>
 								</tr>
 							)

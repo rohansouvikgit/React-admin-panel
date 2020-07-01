@@ -1,0 +1,11 @@
+.green:before {
+	content: ' \25CF';
+	font-size: 28px;
+	color: green;
+}
+
+.red:before {
+	content: ' \25CF';
+	font-size: 28px;
+	color: red;
+}

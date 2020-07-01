@@ -13,11 +13,6 @@ const LoginPage = () => {
 		password: ''
 	})
 
-	// const errors = {
-	// 	username: '',
-	// 	password: ''
-	// }
-
 	const [loading, setLoading] = useState(false)
 
 	const submitForm = (e) => {
@@ -50,19 +45,7 @@ const LoginPage = () => {
 
 	const changeHandler = (e) => {
 		e.preventDefault()
-		// const { name, value } = e.target
-		// console.log(name, value)
 
-		// switch (name) {
-		// 	case 'fullName':
-		// 		errors.username = value.length < 5 ? 'Full Name must be 5 characters long!' : ''
-		// 		break
-		// 	case 'password':
-		// 		errors.password = value.length < 6 ? 'Password must be 6 characters long!' : ''
-		// 		break
-		// 	default:
-		// 		break
-		// }
 		setForm({ ...form, [e.target.name]: e.target.value })
 	}
 
