@@ -86,8 +86,6 @@ const Product = () => {
 		showProduct()
 	}, [])
 
-	const productImageModal = <ProductImage show={show} handleClose={handleClose} images={image} />
-
 	return (
 		<div>
 			<Button variant="primary" onClick={() => history.push('/product/insert')}>
@@ -143,7 +141,7 @@ const Product = () => {
 					</tbody>
 				</Table>
 			</Container>
-			{show && productImageModal}
+			{show && <ProductImage show={show} handleClose={handleClose} images={image} />}
 		</div>
 	)
 }
