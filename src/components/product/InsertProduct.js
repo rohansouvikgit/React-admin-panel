@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Form, Button, Container, Row, Col } from 'react-bootstrap'
-import Axios from '../Axios'
+import Axios from '../../Axios'
 import { useToasts } from 'react-toast-notifications'
 
 const InsertProduct = () => {

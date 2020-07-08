@@ -23,7 +23,7 @@ const LoginPage = () => {
 				if (result.status === 200) {
 					localStorage.setItem('token', result.data.token)
 					localStorage.setItem('username', result.data.username)
-					history.push('/category')
+					history.push('/dashboard')
 					addToast('Sucessfully Logged In...', {
 						appearance: 'success',
 						autoDismiss: true

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Form, Button, Container } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
-import Axios from '../Axios'
+import Axios from '../../Axios'
 
 const InsertBrand = () => {
 	const [form, setForm] = useState({

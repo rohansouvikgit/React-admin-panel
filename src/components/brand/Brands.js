@@ -1,6 +1,7 @@
 import React, { useReducer, useEffect, useState } from 'react'
-import Axios from '../Axios'
-import { Card, CardGroup, Button, Container, CardColumns } from 'react-bootstrap'
+import Axios from '../../Axios'
+import { Card, Button, Container, CardColumns } from 'react-bootstrap'
+import { MDBCol, MDBFormInline, MDBIcon } from 'mdbreact'
 import Swal from 'sweetalert2'
 import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
@@ -38,6 +39,7 @@ const Brand = () => {
 			type: 'SHOW_BRAND',
 			payload: response.data.brand
 		})
+		setFilterBrand(response.data.brand)
 	}
 
 	const editBrand = (name) => {
@@ -78,6 +80,14 @@ const Brand = () => {
 		})
 	}
 
+	const [filterBrand, setFilterBrand] = useState([])
+	const searchFilter = (e) => {
+		const filtered = brand.filter((obj) =>
+			obj.name.toLowerCase().includes(e.target.value.toLowerCase())
+		)
+		setFilterBrand(filtered)
+	}
+
 	useEffect(() => {
 		showBrand()
 	}, [])
@@ -87,13 +97,26 @@ const Brand = () => {
 	)
 
 	return (
-		<div>
+		<div style={{ position: 'sticky' }}>
 			<Button variant="primary" onClick={() => history.push('/brand/insert')}>
 				Add Brand
 			</Button>
 			<Container>
+				<MDBCol md="4">
+					<MDBFormInline className="md-form">
+						<MDBIcon icon="search" />
+						<input
+							className="form-control form-control-sm ml-3 w-75"
+							type="text"
+							placeholder="Search"
+							aria-label="Search"
+							onChange={searchFilter}
+						/>
+					</MDBFormInline>
+				</MDBCol>
+				<br />
 				<CardColumns>
-					{brand.map((key) => {
+					{filterBrand.map((key) => {
 						return (
 							<Card style={{ width: '18rem' }} key={key.id}>
 								<Card.Img variant="top" src={baseURL + key.brand_image} alt="brand" />

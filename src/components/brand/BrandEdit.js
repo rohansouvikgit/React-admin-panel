@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap'
-import Axios from '../Axios'
+import Axios from '../../Axios'
 import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 

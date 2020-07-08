@@ -1,9 +1,10 @@
 import React, { useReducer, useEffect, useState } from 'react'
-import Axios from '../Axios'
+import Axios from '../../Axios'
 import { Table, Container, Button } from 'react-bootstrap'
 import { Image, Info, Trash2, Edit } from 'react-feather'
+import { MDBCol, MDBFormInline, MDBIcon } from 'mdbreact'
 import ProductImage from './ProductImages'
-import './product.css'
+import './product.scss'
 import Swal from 'sweetalert2'
 import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
@@ -14,6 +15,8 @@ const productReducer = (state, action) => {
 			return action.payload
 		case 'REMOVE_PRODUCT':
 			return state.filter((key) => key.name !== action.payload)
+		case 'INITIAL':
+			return state
 		default:
 			return state
 	}
@@ -48,6 +51,7 @@ const Product = () => {
 			type: 'SHOW_PRODUCT',
 			payload: response.data.product
 		})
+		setFilteredProduct(response.data.product)
 	}
 
 	const removeProduct = (name) => {
@@ -82,6 +86,14 @@ const Product = () => {
 		})
 	}
 
+	const [filteredProduct, setFilteredProduct] = useState([])
+	const searchFilter = (e) => {
+		const filtered = product.filter((obj) =>
+			obj.name.toLowerCase().includes(e.target.value.toLowerCase())
+		)
+		setFilteredProduct(filtered)
+	}
+
 	useEffect(() => {
 		showProduct()
 	}, [])
@@ -91,7 +103,23 @@ const Product = () => {
 			<Button variant="primary" onClick={() => history.push('/product/insert')}>
 				Add Product
 			</Button>
+			<br />
+			<br />
+
 			<Container fluid>
+				<MDBCol md="4">
+					<MDBFormInline className="md-form">
+						<MDBIcon icon="search" />
+						<input
+							className="form-control form-control-sm ml-3 w-75"
+							type="text"
+							placeholder="Search"
+							aria-label="Search"
+							onChange={searchFilter}
+						/>
+					</MDBFormInline>
+				</MDBCol>
+				<br />
 				<Table striped bordered hover>
 					<thead>
 						<tr>
@@ -107,7 +135,7 @@ const Product = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{product.map((item) => {
+						{filteredProduct.map((item) => {
 							return (
 								<tr key={item.id}>
 									<td>{++count}</td>

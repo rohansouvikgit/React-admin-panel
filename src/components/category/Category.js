@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react'
-import Axios from '../Axios'
+import Axios from '../../Axios'
 import { Table, Button, Container } from 'react-bootstrap'
+import { MDBCol, MDBFormInline, MDBIcon } from 'mdbreact'
 import CatEditModal from './CategoryEdit'
 import Swal from 'sweetalert2'
 import { useHistory } from 'react-router-dom'
@@ -38,6 +39,7 @@ const Category = () => {
 			type: 'SHOW_CATEGORY',
 			payload: response.data.cat
 		})
+		setFilteredCategory(response.data.cat)
 	}
 
 	const editCat = (name) => {
@@ -78,20 +80,40 @@ const Category = () => {
 		})
 	}
 
+	const [filteredCategory, setFilteredCategory] = useState([])
+	const searchFilter = (e) => {
+		const filtered = category.filter((obj) =>
+			obj.name.toLowerCase().includes(e.target.value.toLowerCase())
+		)
+		setFilteredCategory(filtered)
+	}
+
 	useEffect(() => {
 		showCategory()
 	}, [])
-
-	const editModal = (
-		<CatEditModal show={show} handleClose={handleClose} filteredCat={filteredCat[0]} />
-	)
 
 	return (
 		<div>
 			<Button variant="primary" onClick={() => history.push('/category/insert')}>
 				Add Category
 			</Button>
+			<br />
+			<br />
+
 			<Container>
+				<MDBCol md="4">
+					<MDBFormInline className="md-form">
+						<MDBIcon icon="search" />
+						<input
+							className="form-control form-control-sm ml-3 w-75"
+							type="text"
+							placeholder="Search"
+							aria-label="Search"
+							onChange={searchFilter}
+						/>
+					</MDBFormInline>
+				</MDBCol>
+				<br />
 				<Table striped bordered hover>
 					<thead>
 						<tr>
@@ -102,7 +124,7 @@ const Category = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{category.map((item) => {
+						{filteredCategory.map((item) => {
 							return (
 								<tr key={item.id}>
 									<td>{++count}</td>
@@ -134,7 +156,7 @@ const Category = () => {
 				</Table>
 			</Container>
 
-			{show && editModal}
+			{show && <CatEditModal show={show} handleClose={handleClose} filteredCat={filteredCat[0]} />}
 		</div>
 	)
 }

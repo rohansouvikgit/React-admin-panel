@@ -2,18 +2,18 @@ import React, { lazy, Suspense } from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import { ToastProvider } from 'react-toast-notifications'
-// import Sidebar from './components/Sidebar'
 import PrivateRoute from './components/PrivateRoute'
-import './styles.css'
+import './styles.scss'
 const Header = lazy(() => import('./components/Header'))
+// const Sidebar = lazy(() => import('./components/Sidebar'))
 const LoginPage = lazy(() => import('./components/LoginPage'))
 const Dashboard = lazy(() => import('./components/Dashboard'))
-const Category = lazy(() => import('./components/Category'))
-const Brand = lazy(() => import('./components/Brands'))
-const Product = lazy(() => import('./components/Product'))
-const InsertCategory = lazy(() => import('./components/InsertCategory'))
-const InsertBrand = lazy(() => import('./components/InsertBrand'))
-const InsertProduct = lazy(() => import('./components/InsertProduct'))
+const Category = lazy(() => import('./components/category/Category'))
+const Brand = lazy(() => import('./components/brand/Brands'))
+const Product = lazy(() => import('./components/product/Product'))
+const InsertCategory = lazy(() => import('./components/category/InsertCategory'))
+const InsertBrand = lazy(() => import('./components/brand/InsertBrand'))
+const InsertProduct = lazy(() => import('./components/product/InsertProduct'))
 
 const App = () => {
 	return (
@@ -23,8 +23,8 @@ const App = () => {
 					<Suspense fallback={<h2>Loading...</h2>}>
 						<div>
 							<PrivateRoute component={Header} />
+							{/* <PrivateRoute component={Sidebar} /> */}
 							<Switch>
-								{/* <Sidebar pageWrapId={'page-wrap'} outerContainerId={'App'} /> */}
 								<Route exact path="/" component={() => <Redirect to="/Dashboard" />} />
 								<Route path="/auth/login" exact component={LoginPage} />
 								<PrivateRoute path="/dashboard" exact component={Dashboard} />

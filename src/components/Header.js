@@ -1,7 +1,7 @@
 import React from 'react'
-import { Navbar, Nav, Dropdown } from 'react-bootstrap'
-import { useHistory } from 'react-router-dom'
+import { useHistory, NavLink } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
+import { MDBNavbar, MDBNavbarNav, MDBNavItem, MDBCollapse, MDBNavbarBrand } from 'mdbreact'
 
 const Header = () => {
 	const history = useHistory()
@@ -18,8 +18,41 @@ const Header = () => {
 	}
 
 	return (
-		<div>
-			<Navbar collapseOnSelect expand="lg" bg="light">
+		<div className="header">
+			<header>
+				<MDBNavbar style={{ backgroundColor: 'black' }} dark expand="md" scrolling>
+					<MDBNavbarBrand>
+						<strong className="white-text">Admin Panel</strong>
+					</MDBNavbarBrand>
+					<MDBCollapse navbar>
+						<MDBNavbarNav left>
+							<NavLink to="/dashboard" activeClassName="active" style={{ color: 'white' }}>
+								Dashboard
+							</NavLink>
+							&nbsp;&nbsp;
+							<NavLink to="/category" activeClassName="active" style={{ color: 'white' }}>
+								Category
+							</NavLink>
+							&nbsp;&nbsp;
+							<NavLink to="/brand" activeClassName="active" style={{ color: 'white' }}>
+								Brand
+							</NavLink>
+							&nbsp;&nbsp;
+							<NavLink to="/product" activeClassName="seleactivected" style={{ color: 'white' }}>
+								Product
+							</NavLink>
+						</MDBNavbarNav>
+						<MDBNavbarNav right>
+							<MDBNavItem>
+								<strong onClick={logoutButton} style={{ color: 'white', cursor: 'pointer' }}>
+									Logout
+								</strong>
+							</MDBNavItem>
+						</MDBNavbarNav>
+					</MDBCollapse>
+				</MDBNavbar>
+			</header>
+			{/* <Navbar collapseOnSelect expand="lg" bg="light">
 				<Nav className="mr-auto">
 					<i className="fa fa-align-justify fa-2x"></i>
 				</Nav>
@@ -33,7 +66,7 @@ const Header = () => {
 						</Dropdown.Menu>
 					</Dropdown>
 				</Nav>
-			</Navbar>
+			</Navbar> */}
 		</div>
 	)
 }
