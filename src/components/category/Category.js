@@ -8,21 +8,51 @@ import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import { Edit, Trash2 } from 'react-feather'
 
+const initialState = {
+	category: [],
+	filteredCategory: [],
+	filterEditCat: []
+}
+
 const categoryReducer = (state, action) => {
 	switch (action.type) {
 		case 'SHOW_CATEGORY':
-			return action.payload
-		case 'REMOVE_CATEGORY':
-			return state.filter((key) => key.name !== action.payload)
+			return {
+				...state,
+				category: action.payload,
+				filteredCategory: action.payload
+			}
+		case 'REMOVE_CATEGORY': {
+			const deletedCat = state.category.filter((key) => key.name !== action.payload)
+			const deletedFilteredCat = state.filteredCategory.filter((key) => key.name !== action.payload)
+
+			return {
+				...state,
+				category: deletedCat,
+				filteredCategory: deletedFilteredCat
+			}
+		}
+		case 'FILTERED_CATEGORY':
+			return {
+				...state,
+				filteredCategory: action.payload
+			}
+		case 'FILTER_EDIT_CATEGORY': {
+			const result = state.filteredCategory.filter((key) => key.name === action.payload)
+
+			return {
+				...state,
+				filterEditCat: result
+			}
+		}
 		default:
 			return state
 	}
 }
 
 const Category = () => {
-	const [category, dispatch] = useReducer(categoryReducer, [])
+	const [state, dispatch] = useReducer(categoryReducer, initialState)
 	const [show, setShow] = useState(false)
-	const [filteredCat, setFilteredCat] = useState([])
 	const history = useHistory()
 	const { addToast } = useToasts()
 	let count = 0
@@ -33,18 +63,24 @@ const Category = () => {
 	}
 	const handleShow = () => setShow(true)
 
-	const showCategory = async () => {
-		const response = await Axios.get('/admin/showCategory')
-		dispatch({
-			type: 'SHOW_CATEGORY',
-			payload: response.data.cat
-		})
-		setFilteredCategory(response.data.cat)
+	const showCategory = () => {
+		Axios.get('/admin/showCategory')
+			.then((response) => {
+				dispatch({
+					type: 'SHOW_CATEGORY',
+					payload: response.data.cat
+				})
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 	}
 
 	const editCat = (name) => {
-		const result = category.filter((key) => key.name === name)
-		setFilteredCat(result)
+		dispatch({
+			type: 'FILTER_EDIT_CATEGORY',
+			payload: name
+		})
 		handleShow()
 	}
 
@@ -56,36 +92,42 @@ const Category = () => {
 			showCancelButton: true,
 			confirmButtonText: 'Yes, delete it!',
 			cancelButtonText: 'No, keep it'
-		}).then(async (result) => {
+		}).then((result) => {
 			if (result.value) {
-				const response = await Axios.delete(`/admin/categoryRemove/${name}`).catch((error) => {
-					if (error.response) {
-						addToast("Something's Went Wrong!", {
-							appearance: 'error',
-							autoDismiss: true
-						})
-					}
-				})
-				if (response.data.name) {
-					addToast('Category removed!', {
-						appearance: 'warning',
-						autoDismiss: true
+				Axios.delete(`/admin/categoryRemove/${name}`)
+					.then((response) => {
+						if (response.data.name) {
+							addToast('Category removed!', {
+								appearance: 'warning',
+								autoDismiss: true
+							})
+							dispatch({
+								type: 'REMOVE_CATEGORY',
+								payload: response.data.name
+							})
+						}
 					})
-					dispatch({
-						type: 'REMOVE_CATEGORY',
-						payload: response.data.name
+					.catch((error) => {
+						if (error.response) {
+							addToast("Something's Went Wrong!", {
+								appearance: 'error',
+								autoDismiss: true
+							})
+						}
 					})
-				}
 			}
 		})
 	}
 
-	const [filteredCategory, setFilteredCategory] = useState([])
 	const searchFilter = (e) => {
-		const filtered = category.filter((obj) =>
+		const filtered = state.category.filter((obj) =>
 			obj.name.toLowerCase().includes(e.target.value.toLowerCase())
 		)
-		setFilteredCategory(filtered)
+		console.log(filtered)
+		dispatch({
+			type: 'FILTERED_CATEGORY',
+			payload: filtered
+		})
 	}
 
 	useEffect(() => {
@@ -124,7 +166,7 @@ const Category = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{filteredCategory.map((item) => {
+						{state.filteredCategory.map((item) => {
 							return (
 								<tr key={item.id}>
 									<td>{++count}</td>
@@ -156,7 +198,9 @@ const Category = () => {
 				</Table>
 			</Container>
 
-			{show && <CatEditModal show={show} handleClose={handleClose} filteredCat={filteredCat[0]} />}
+			{show && (
+				<CatEditModal show={show} handleClose={handleClose} filteredCat={state.filterEditCat[0]} />
+			)}
 		</div>
 	)
 }
