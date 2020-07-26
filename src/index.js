@@ -5,7 +5,6 @@ import { ToastProvider } from 'react-toast-notifications'
 import PrivateRoute from './components/PrivateRoute'
 import './styles.scss'
 const Header = lazy(() => import('./components/Header'))
-// const Sidebar = lazy(() => import('./components/Sidebar'))
 const LoginPage = lazy(() => import('./components/LoginPage'))
 const Dashboard = lazy(() => import('./components/Dashboard'))
 const Category = lazy(() => import('./components/category/Category'))
@@ -23,7 +22,6 @@ const App = () => {
 					<Suspense fallback={<h2>Loading...</h2>}>
 						<div>
 							<PrivateRoute component={Header} />
-							{/* <PrivateRoute component={Sidebar} /> */}
 							<Switch>
 								<Route exact path="/" component={() => <Redirect to="/Dashboard" />} />
 								<Route path="/auth/login" exact component={LoginPage} />
@@ -39,10 +37,6 @@ const App = () => {
 					</Suspense>
 				</Router>
 			</ToastProvider>
-
-			{/* <div id="page-wrap">
-				<h1>Click to show menu</h1>
-			</div> */}
 		</div>
 	)
 }

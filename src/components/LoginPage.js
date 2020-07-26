@@ -1,22 +1,32 @@
 import React, { useState } from 'react'
-import { Form, Button, Spinner, Container, Row, Card } from 'react-bootstrap'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
+import { Container, FormControl, FormLabel, Row, Card, Button, Spinner } from 'react-bootstrap'
 import Axios from '../Axios'
 import { useToasts } from 'react-toast-notifications'
 import { useHistory } from 'react-router-dom'
 
+const initialValues = {
+	username: '',
+	password: ''
+}
+
+const validationSchema = Yup.object({
+	username: Yup.string().required('Username is Required!').min(5, 'Minimum 5 characters!'),
+	password: Yup.string()
+		.required('Password is required!')
+		.matches(/(?=.*\d)/, 'Atleast 1 number!')
+		.matches(/(?=.*[a-z])/, 'Atleast 1 character')
+		.matches(/[0-9a-zA-Z]{5,}/, 'Should contain atleast 5 characters!')
+})
+
 const LoginPage = () => {
+	const [loading, setLoading] = useState(false)
 	const history = useHistory()
 	const { addToast } = useToasts()
 
-	const [form, setForm] = useState({
-		username: '',
-		password: ''
-	})
-
-	const [loading, setLoading] = useState(false)
-
-	const submitForm = (e) => {
-		e.preventDefault()
+	const onSubmit = (form) => {
+		console.log(form)
 		setLoading(true)
 		Axios.post('/admin/login', { form })
 			.then(function (result) {
@@ -43,12 +53,6 @@ const LoginPage = () => {
 			})
 	}
 
-	const changeHandler = (e) => {
-		e.preventDefault()
-
-		setForm({ ...form, [e.target.name]: e.target.value })
-	}
-
 	const loadingButton = (
 		<Button variant="primary" type="submit" style={{ float: 'right' }}>
 			<Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />
@@ -62,38 +66,40 @@ const LoginPage = () => {
 	)
 
 	return (
-		<div>
+		<Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
 			<Container>
 				<Row xs={1} md={3} className="justify-content-md-center">
 					<Card style={{ top: 50 }}>
 						<Card.Header>Admin Login</Card.Header>
 						<Card.Body>
-							<Form onSubmit={submitForm} id="login-form">
-								<Form.Group controlId="username">
-									<Form.Label>Username</Form.Label>
-									<Form.Control
-										type="text"
-										name="username"
-										placeholder="Enter Username"
-										onChange={changeHandler}
-									/>
-								</Form.Group>
-								<Form.Group controlId="password">
-									<Form.Label>Password</Form.Label>
-									<Form.Control
-										type="password"
-										name="password"
-										placeholder="Enter Password"
-										onChange={changeHandler}
-									/>
-								</Form.Group>
+							<Form id="login-form">
+								<Field name="username">
+									{({ field, form: { touched, errors }, meta }) => (
+										<div>
+											<FormLabel>Username</FormLabel>
+											<FormControl type="text" placeholder="username" {...field} />
+										</div>
+									)}
+								</Field>
+								<ErrorMessage name="username" />
+
+								<Field name="password">
+									{({ field, form: { touched, errors }, meta }) => (
+										<div>
+											<FormLabel>Password</FormLabel>
+											<FormControl type="password" placeholder="password" {...field} />
+										</div>
+									)}
+								</Field>
+								<ErrorMessage name="password" />
+
 								{loading ? loadingButton : submitButton}
 							</Form>
 						</Card.Body>
 					</Card>
 				</Row>
 			</Container>
-		</div>
+		</Formik>
 	)
 }
 

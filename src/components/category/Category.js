@@ -72,7 +72,9 @@ const Category = () => {
 				})
 			})
 			.catch((err) => {
-				console.log(err)
+				if (err.response.status) {
+					console.log('unauthorized')
+				}
 			})
 	}
 

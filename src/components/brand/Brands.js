@@ -56,26 +56,29 @@ const Brand = () => {
 			showCancelButton: true,
 			confirmButtonText: 'Yes, delete it!',
 			cancelButtonText: 'No, keep it'
-		}).then(async (result) => {
+		}).then((result) => {
 			if (result.value) {
-				const response = await Axios.delete(`/admin/brandRemove/${name}`).catch((error) => {
-					if (error.response) {
-						addToast("Something's Went Wrong!", {
-							appearance: 'error',
-							autoDismiss: true
-						})
-					}
-				})
-				if (response.data.name) {
-					addToast('Brand removed!', {
-						appearance: 'warning',
-						autoDismiss: true
+				Axios.delete(`/admin/brandRemove/${name}`)
+					.then((response) => {
+						if (response.data.name) {
+							addToast('Brand removed!', {
+								appearance: 'warning',
+								autoDismiss: true
+							})
+							dispatch({
+								type: 'REMOVE_BRAND',
+								payload: response.data.name
+							})
+						}
 					})
-					dispatch({
-						type: 'REMOVE_BRAND',
-						payload: response.data.name
+					.catch((error) => {
+						if (error.response) {
+							addToast("Something's Went Wrong!", {
+								appearance: 'error',
+								autoDismiss: true
+							})
+						}
 					})
-				}
 			}
 		})
 	}
@@ -91,6 +94,9 @@ const Brand = () => {
 	useEffect(() => {
 		showBrand()
 	}, [])
+	useEffect(() => {
+		showBrand()
+	}, [brand])
 
 	const editModal = (
 		<BrandEditModal show={show} handleClose={handleClose} filteredBrand={filteredBrand[0]} />

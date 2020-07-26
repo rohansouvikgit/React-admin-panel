@@ -3,6 +3,8 @@ import { Form, Button, Container } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import Axios from '../../Axios'
+import ReactCrop from 'react-image-crop'
+import 'react-image-crop/dist/ReactCrop.css'
 
 const InsertBrand = () => {
 	const [form, setForm] = useState({
@@ -15,6 +17,9 @@ const InsertBrand = () => {
 
 	const [selectedFile, setSelectedFile] = useState()
 	const [preview, setPreview] = useState()
+	const [crop, setCrop] = useState({ aspect: 16 / 9 })
+	const [image, setImage] = useState(null)
+	const [result, setResult] = useState(null)
 
 	const onSelectFile = (e) => {
 		if (!e.target.files || e.target.files.length === 0) {
@@ -23,10 +28,55 @@ const InsertBrand = () => {
 		}
 
 		setSelectedFile(e.target.files[0])
+	}
+
+	const getCroppedImg = (e) => {
+		e.preventDefault()
+		const canvas = document.createElement('canvas')
+		const scaleX = image.naturalWidth / image.width
+		const scaleY = image.naturalHeight / image.height
+		canvas.width = crop.width
+		canvas.height = crop.height
+		const ctx = canvas.getContext('2d')
+
+		ctx.drawImage(
+			image,
+			crop.x * scaleX,
+			crop.y * scaleY,
+			crop.width * scaleX,
+			crop.height * scaleY,
+			0,
+			0,
+			crop.width,
+			crop.height
+		)
+
+		const base64Image = canvas.toDataURL('image/jpeg')
+		setResult(base64Image)
+		var blob = dataURLtoBlob(base64Image)
+		const imageFile = new File([blob], 'uploaded_file.jpg', {
+			type: 'image/jpeg',
+			lastModified: Date.now()
+		})
 		setForm({
 			...form,
-			image: e.target.files[0]
+			image: imageFile
 		})
+	}
+
+	/**
+	 * Convert base64 to blob
+	 */
+	function dataURLtoBlob(dataurl) {
+		var arr = dataurl.split(','),
+			mime = arr[0].match(/:(.*?);/)[1],
+			bstr = atob(arr[1]),
+			n = bstr.length,
+			u8arr = new Uint8Array(n)
+		while (n--) {
+			u8arr[n] = bstr.charCodeAt(n)
+		}
+		return new Blob([u8arr], { type: mime })
 	}
 
 	const formSubmit = (e) => {
@@ -95,11 +145,26 @@ const InsertBrand = () => {
 						<Form.File
 							id="exampleFormControlFile1"
 							label="Example file input"
+							accept="image/*"
 							onChange={onSelectFile}
 						/>
 					</Form.Group>
-					{selectedFile && (
+					{/* {selectedFile && (
 						<img src={preview} alt="brand" style={{ height: '9rem', width: '9rem' }} />
+					)} */}
+
+					{selectedFile && (
+						<div>
+							<ReactCrop src={preview} onImageLoaded={setImage} crop={crop} onChange={setCrop} />
+							<button className="btn btn-danger" onClick={getCroppedImg}>
+								Crop Image
+							</button>
+						</div>
+					)}
+					{form.image && (
+						<div>
+							<img src={result} alt="brand" />
+						</div>
 					)}
 
 					<br />
